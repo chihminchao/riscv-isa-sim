@@ -436,6 +436,9 @@
 
 #define P_REDUCTION_LOOP_END(BIT, IS_SAT) \
     } \
+    if (IS_SAT) { \
+      p_res = P_SAT(BIT, p_res); \
+    } \
     type_usew_t<BIT>::type p_rd = p_res; \
     WRITE_P_RD(); \
   } \
