@@ -767,6 +767,13 @@
   (R) \
 )
 
+#define P_USAT_FULL(BIT, R) ( \
+  ((R) < 0) ? 0 : \
+  ((BIT) >= 64) ? (R) : \
+  ((R) > ((1LL << (BIT)) - 1)) ? ((1LL << (BIT)) - 1) : \
+  (R) \
+)
+
 #define P_PACK(BIT, X, Y) \
   require_extension('P'); \
   require(BIT == e8 || BIT == e16 || BIT == e32); \
