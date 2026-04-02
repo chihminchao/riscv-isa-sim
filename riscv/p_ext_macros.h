@@ -744,26 +744,38 @@
   P_RD_DW_LOOP_END()
 
 // Misc
-#define P_SAT(BIT, R) ( \
-  ((BIT) == 64) ? (R) : \
-  ((R) > ((1LL << ((BIT) - 1)) - 1)) ? ((1LL << ((BIT) - 1)) - 1) : \
-  ((R) < -(1LL << ((BIT) - 1))) ? -(1LL << ((BIT) - 1)) : \
-  (R) \
-)
+#define P_SAT(BIT, R) ({ \
+  sreg_t _psat_in = (R); \
+  sreg_t _psat_out; \
+  if ((BIT) == 64) _psat_out = _psat_in; \
+  else if (_psat_in > ((1LL << ((BIT) - 1)) - 1)) _psat_out = (1LL << ((BIT) - 1)) - 1; \
+  else if (_psat_in < -(1LL << ((BIT) - 1))) _psat_out = -(1LL << ((BIT) - 1)); \
+  else _psat_out = _psat_in; \
+  if (_psat_out != _psat_in) P.VU.vxsat->write(1); \
+  _psat_out; \
+})
 
-#define P_USAT(BIT, R) ( \
-  ((R) < 0) ? 0 : \
-  ((BIT) == 64) ? (R) : \
-  ((R) > ((1LL << ((BIT) - 1)) - 1)) ? ((1LL << ((BIT) - 1)) - 1) : \
-  (R) \
-)
+#define P_USAT(BIT, R) ({ \
+  sreg_t _pusat_in = (R); \
+  sreg_t _pusat_out; \
+  if (_pusat_in < 0) _pusat_out = 0; \
+  else if ((BIT) == 64) _pusat_out = _pusat_in; \
+  else if (_pusat_in > ((1LL << ((BIT) - 1)) - 1)) _pusat_out = (1LL << ((BIT) - 1)) - 1; \
+  else _pusat_out = _pusat_in; \
+  if (_pusat_out != _pusat_in) P.VU.vxsat->write(1); \
+  _pusat_out; \
+})
 
-#define P_USAT_FULL(BIT, R) ( \
-  ((R) < 0) ? 0 : \
-  ((BIT) >= 64) ? (R) : \
-  ((R) > ((1LL << (BIT)) - 1)) ? ((1LL << (BIT)) - 1) : \
-  (R) \
-)
+#define P_USAT_FULL(BIT, R) ({ \
+  sreg_t _pusatf_in = (R); \
+  sreg_t _pusatf_out; \
+  if (_pusatf_in < 0) _pusatf_out = 0; \
+  else if ((BIT) >= 64) _pusatf_out = _pusatf_in; \
+  else if (_pusatf_in > ((1LL << (BIT)) - 1)) _pusatf_out = (1LL << (BIT)) - 1; \
+  else _pusatf_out = _pusatf_in; \
+  if (_pusatf_out != _pusatf_in) P.VU.vxsat->write(1); \
+  _pusatf_out; \
+})
 
 #define P_PACK(BIT, X, Y) \
   require_extension('P'); \
