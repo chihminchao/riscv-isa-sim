@@ -56,13 +56,13 @@
 #define WRITE_P_REG_PAIR(reg, value) \
   if(reg != 0) { \
     uint64_t val = (value); \
-    WRITE_REG(reg*2, sext32(val)); \
-    WRITE_REG((reg*2) + 1, (sreg_t(val)) >> 32); \
+    WRITE_REG(reg, sext32(val)); \
+    WRITE_REG((reg) + 1, (sreg_t(val)) >> 32); \
   }
 
 #define P_READ_REG_PAIR(reg) ({ \
   (reg) == 0 ? reg_t(0) : \
-  (READ_REG((reg*2) + 1) << 32) + zext32(READ_REG(reg*2)); })
+  (READ_REG((reg) + 1) << 32) + zext32(READ_REG(reg)); })
 
 #define P_RS1_PAIR P_READ_REG_PAIR(insn.rs1_p())
 #define P_RS2_PAIR P_READ_REG_PAIR(insn.rs2_p())

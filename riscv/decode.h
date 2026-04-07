@@ -98,9 +98,9 @@ public:
   uint64_t iorw() { return x(20, 8); }
   uint64_t bs() { return x(30, 2); } // Crypto ISE - SM4/AES32 byte select.
   uint64_t rcon() { return x(20, 4); } // Crypto ISE - AES64 round const.
-  uint64_t rd_p() { return x(8, 4); }
-  uint64_t rs1_p() { return x(16, 4); }
-  uint64_t rs2_p() { return x(21, 4); }
+  uint64_t rd_p() { return x(8, 4) * 2; }
+  uint64_t rs1_p() { return x(16, 4) * 2; }
+  uint64_t rs2_p() { return x(21, 4) * 2; }
 
   [[maybe_unused]] int64_t rvc_opcode() { return x(0, 2); }
   int64_t rvc_imm() { return x(2, 5) + (xs(12, 1) << 5); }

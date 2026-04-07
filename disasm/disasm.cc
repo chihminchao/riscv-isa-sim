@@ -121,23 +121,22 @@ struct : public arg_t {
   }
 } xrs3;
 
-// RV32 P-extension register pair arguments (4-bit encoded, represents even registers)
-// The 4-bit field encodes register number / 2, so we multiply by 2 to get actual register
+// RV32 P-extension register pair arguments (even register number)
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return xpr_name[insn.rd_p() * 2];
+    return xpr_name[insn.rd_p()];
   }
 } xrd_p;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return xpr_name[insn.rs1_p() * 2];
+    return xpr_name[insn.rs1_p()];
   }
 } xrs1_p;
 
 struct : public arg_t {
   std::string to_string(insn_t insn) const {
-    return xpr_name[insn.rs2_p() * 2];
+    return xpr_name[insn.rs2_p()];
   }
 } xrs2_p;
 
